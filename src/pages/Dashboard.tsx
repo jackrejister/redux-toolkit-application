@@ -1,7 +1,7 @@
 
 import React from 'react';
 import {
-  Grid,
+  Grid2,
   Card,
   CardContent,
   Typography,
@@ -95,8 +95,8 @@ const Dashboard: React.FC = () => {
       </Typography>
 
       {/* Statistics Cards */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Grid2 container spacing={3} sx={{ mb: 4 }}>
+        <Grid2 xs={12} sm={6} md={3}>
           <StatCard
             title="Total Tasks"
             value={taskStats?.total || 0}
@@ -104,8 +104,8 @@ const Dashboard: React.FC = () => {
             color={customColors.priority.medium}
             subtitle="All tasks"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <StatCard
             title="Completed"
             value={taskStats?.completed || 0}
@@ -113,8 +113,8 @@ const Dashboard: React.FC = () => {
             color={customColors.status.completed}
             subtitle={`${calculateCompletionRate().toFixed(1)}% completion rate`}
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <StatCard
             title="Pending"
             value={taskStats?.pending || 0}
@@ -122,8 +122,8 @@ const Dashboard: React.FC = () => {
             color={customColors.status.pending}
             subtitle="In progress"
           />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        </Grid2>
+        <Grid2 xs={12} sm={6} md={3}>
           <StatCard
             title="Overdue"
             value={taskStats?.overdue || 0}
@@ -131,12 +131,12 @@ const Dashboard: React.FC = () => {
             color={customColors.priority.high}
             subtitle="Need attention"
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
 
-      <Grid container spacing={3}>
+      <Grid2 container spacing={3}>
         {/* Progress Overview */}
-        <Grid item xs={12} md={6}>
+        <Grid2 xs={12} md={6}>
           <Card>
             <CardContent>
               <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
@@ -189,10 +189,10 @@ const Dashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
-        </Grid>
+        </Grid2>
 
         {/* Recent Tasks */}
-        <Grid item xs={12} md={6}>
+        <Grid2 xs={12} md={6}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -245,10 +245,10 @@ const Dashboard: React.FC = () => {
               )}
             </CardContent>
           </Card>
-        </Grid>
+        </Grid2>
 
         {/* Team Activity */}
-        <Grid item xs={12}>
+        <Grid2 xs={12}>
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
@@ -258,9 +258,9 @@ const Dashboard: React.FC = () => {
               {usersLoading ? (
                 <LinearProgress />
               ) : (
-                <Grid container spacing={2}>
+                <Grid2 container spacing={2}>
                   {teamUsers?.slice(0, 6).map((user) => (
-                    <Grid item xs={12} sm={6} md={4} key={user.id}>
+                    <Grid2 xs={12} sm={6} md={4} key={user.id}>
                       <Box 
                         display="flex" 
                         alignItems="center" 
@@ -285,14 +285,14 @@ const Dashboard: React.FC = () => {
                           />
                         </Box>
                       </Box>
-                    </Grid>
+                    </Grid2>
                   ))}
-                </Grid>
+                </Grid2>
               )}
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };
