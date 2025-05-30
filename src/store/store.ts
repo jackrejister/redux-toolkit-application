@@ -18,11 +18,7 @@ export const store = configureStore({
     tasks: tasksReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-      },
-    })
+    getDefaultMiddleware()
       .concat(authApi.middleware)
       .concat(tasksApi.middleware)
       .concat(usersApi.middleware),

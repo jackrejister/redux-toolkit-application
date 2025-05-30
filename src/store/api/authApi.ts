@@ -27,7 +27,7 @@ export const authApi = createApi({
   tagTypes: ['User'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
-      query: (credentials) => ({
+      query: () => ({
         url: 'users/1',
         method: 'GET',
       }),
@@ -58,18 +58,10 @@ export const authApi = createApi({
         refreshToken: 'mock-refresh-token-' + Date.now(),
       }),
     }),
-
-    logout: builder.mutation<void, void>({
-      query: () => ({
-        url: 'users/logout',
-        method: 'POST',
-      }),
-    }),
   }),
 });
 
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useLogoutMutation,
 } = authApi;
