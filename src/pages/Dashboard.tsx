@@ -2,37 +2,26 @@
 import React from 'react';
 import {
   Grid2,
-  Card,
-  CardContent,
   Typography,
   Box,
-  LinearProgress,
-  Avatar,
-  Chip,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Divider,
 } from '@mui/material';
 import {
   Assignment,
   CheckCircle,
   Schedule,
   Warning,
-  TrendingUp,
-  Refresh,
 } from '@mui/icons-material';
 import { useGetTaskStatsQuery, useGetTasksQuery } from '../store/api/tasksApi';
 import { useGetTeamUsersQuery } from '../store/api/usersApi';
 import { useAppSelector } from '../store/hooks';
 import { customColors } from '../theme/theme';
+import StatCard from '../components/Dashboard/StatCard';
+import ProgressOverview from '../components/Dashboard/ProgressOverview';
+import RecentTasks from '../components/Dashboard/RecentTasks';
 
 const Dashboard: React.FC = () => {
   const { user } = useAppSelector(state => state.auth);
   
-  // Demonstrate multiple RTK Query hooks
   const { 
     data: taskStats, 
     isLoading: statsLoading, 
@@ -48,37 +37,6 @@ const Dashboard: React.FC = () => {
     data: teamUsers, 
     isLoading: usersLoading 
   } = useGetTeamUsersQuery();
-
-  const StatCard: React.FC<{
-    title: string;
-    value: number;
-    icon: React.ReactNode;
-    color: string;
-    subtitle?: string;
-  }> = ({ title, value, icon, color, subtitle }) => (
-    <Card>
-      <CardContent>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Box>
-            <Typography color="text.secondary" gutterBottom variant="h6">
-              {title}
-            </Typography>
-            <Typography variant="h4" component="div">
-              {value}
-            </Typography>
-            {subtitle && (
-              <Typography variant="body2" color="text.secondary">
-                {subtitle}
-              </Typography>
-            )}
-          </Box>
-          <Avatar sx={{ bgcolor: color, width: 56, height: 56 }}>
-            {icon}
-          </Avatar>
-        </Box>
-      </CardContent>
-    </Card>
-  );
 
   const calculateCompletionRate = () => {
     if (!taskStats) return 0;
@@ -135,162 +93,19 @@ const Dashboard: React.FC = () => {
       </Grid2>
 
       <Grid2 container spacing={3}>
-        {/* Progress Overview */}
         <Grid2 xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                <Typography variant="h6">Progress Overview</Typography>
-                <IconButton 
-                  onClick={() => refetchStats()}
-                  disabled={statsLoading}
-                  size="small"
-                >
-                  <Refresh />
-                </IconButton>
-              </Box>
-              
-              {statsLoading ? (
-                <LinearProgress />
-              ) : (
-                <Box>
-                  <Box mb={2}>
-                    <Box display="flex" justifyContent="space-between" mb={1}>
-                      <Typography variant="body2">Task Completion</Typography>
-                      <Typography variant="body2">
-                        {taskStats?.completed || 0}/{taskStats?.total || 0}
-                      </Typography>
-                    </Box>
-                    <LinearProgress 
-                      variant="determinate" 
-                      value={calculateCompletionRate()} 
-                      sx={{ height: 8, borderRadius: 4 }}
-                    />
-                  </Box>
-                  
-                  <Box display="flex" gap={1} flexWrap="wrap">
-                    <Chip 
-                      label={`${taskStats?.completed || 0} Completed`}
-                      color="success" 
-                      size="small" 
-                    />
-                    <Chip 
-                      label={`${taskStats?.pending || 0} Pending`}
-                      color="warning" 
-                      size="small" 
-                    />
-                    <Chip 
-                      label={`${taskStats?.overdue || 0} Overdue`}
-                      color="error" 
-                      size="small" 
-                    />
-                  </Box>
-                </Box>
-              )}
-            </CardContent>
-          </Card>
+          <ProgressOverview
+            taskStats={taskStats}
+            statsLoading={statsLoading}
+            refetchStats={refetchStats}
+          />
         </Grid2>
 
-        {/* Recent Tasks */}
         <Grid2 xs={12} md={6}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Recent Tasks
-              </Typography>
-              
-              {tasksLoading ? (
-                <LinearProgress />
-              ) : (
-                <List>
-                  {recentTasksData?.tasks.slice(0, 5).map((task, index) => (
-                    <React.Fragment key={task.id}>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar 
-                            sx={{ 
-                              bgcolor: task.completed 
-                                ? customColors.status.completed 
-                                : customColors.priority[task.priority],
-                              width: 32,
-                              height: 32,
-                            }}
-                          >
-                            {task.completed ? <CheckCircle /> : <Assignment />}
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={task.title}
-                          secondary={
-                            <Box display="flex" alignItems="center" gap={1}>
-                              <Chip 
-                                label={task.priority} 
-                                size="small" 
-                                color={
-                                  task.priority === 'high' ? 'error' :
-                                  task.priority === 'medium' ? 'warning' : 'success'
-                                }
-                              />
-                              {task.completed && (
-                                <Chip label="Completed" size="small" color="success" />
-                              )}
-                            </Box>
-                          }
-                        />
-                      </ListItem>
-                      {index < 4 && <Divider variant="inset" component="li" />}
-                    </React.Fragment>
-                  ))}
-                </List>
-              )}
-            </CardContent>
-          </Card>
-        </Grid2>
-
-        {/* Team Activity */}
-        <Grid2 xs={12}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Team Overview
-              </Typography>
-              
-              {usersLoading ? (
-                <LinearProgress />
-              ) : (
-                <Grid2 container spacing={2}>
-                  {teamUsers?.slice(0, 6).map((user) => (
-                    <Grid2 xs={12} sm={6} md={4} key={user.id}>
-                      <Box 
-                        display="flex" 
-                        alignItems="center" 
-                        p={2} 
-                        borderRadius={1}
-                        bgcolor="background.paper"
-                        border="1px solid"
-                        borderColor="divider"
-                      >
-                        <Avatar sx={{ mr: 2, bgcolor: 'primary.main' }}>
-                          {user.name.charAt(0)}
-                        </Avatar>
-                        <Box>
-                          <Typography variant="subtitle2">{user.name}</Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {user.tasksCount} tasks
-                          </Typography>
-                          <Chip 
-                            label={user.status} 
-                            size="small" 
-                            color={user.status === 'active' ? 'success' : 'default'}
-                          />
-                        </Box>
-                      </Box>
-                    </Grid2>
-                  ))}
-                </Grid2>
-              )}
-            </CardContent>
-          </Card>
+          <RecentTasks
+            recentTasksData={recentTasksData}
+            tasksLoading={tasksLoading}
+          />
         </Grid2>
       </Grid2>
     </Box>
