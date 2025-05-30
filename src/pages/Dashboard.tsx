@@ -13,8 +13,6 @@ import {
 } from '@mui/icons-material';
 import { customColors } from '../theme/theme';
 import StatCard from '../components/Dashboard/StatCard';
-import ProgressOverview from '../components/Dashboard/ProgressOverview';
-import RecentTasks from '../components/Dashboard/RecentTasks';
 
 const Dashboard: React.FC = () => {
   // Simple mock data without any Redux dependencies
@@ -23,29 +21,6 @@ const Dashboard: React.FC = () => {
     completed: 15,
     pending: 7,
     overdue: 3,
-  };
-  
-  const recentTasksData = {
-    tasks: [
-      {
-        id: 1,
-        title: "Complete dashboard design",
-        description: "Finish the dashboard layout",
-        completed: false,
-        priority: "high" as const,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-      {
-        id: 2,
-        title: "Review code changes",
-        description: "Check pull requests",
-        completed: true,
-        priority: "medium" as const,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ]
   };
 
   const calculateCompletionRate = () => {
@@ -101,22 +76,14 @@ const Dashboard: React.FC = () => {
         </Grid2>
       </Grid2>
 
-      <Grid2 container spacing={3}>
-        <Grid2 xs={12} md={6}>
-          <ProgressOverview
-            taskStats={taskStats}
-            statsLoading={false}
-            refetchStats={() => {}}
-          />
-        </Grid2>
-
-        <Grid2 xs={12} md={6}>
-          <RecentTasks
-            recentTasksData={recentTasksData}
-            tasksLoading={false}
-          />
-        </Grid2>
-      </Grid2>
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h6" gutterBottom>
+          Dashboard Overview
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Task management dashboard with simplified state management.
+        </Typography>
+      </Box>
     </Box>
   );
 };
