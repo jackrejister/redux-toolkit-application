@@ -24,7 +24,6 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://jsonplaceholder.typicode.com/',
   }),
-  tagTypes: ['User'],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: () => ({
@@ -41,27 +40,7 @@ export const authApi = createApi({
         refreshToken: 'mock-refresh-token-' + Date.now(),
       }),
     }),
-
-    register: builder.mutation<LoginResponse, { name: string; email: string; password: string }>({
-      query: (userData) => ({
-        url: 'users',
-        method: 'POST',
-        body: userData,
-      }),
-      transformResponse: (response: any): LoginResponse => ({
-        user: {
-          id: response.id || 1,
-          name: response.name,
-          email: response.email,
-        },
-        token: 'mock-jwt-token-' + Date.now(),
-        refreshToken: 'mock-refresh-token-' + Date.now(),
-      }),
-    }),
   }),
 });
 
-export const {
-  useLoginMutation,
-  useRegisterMutation,
-} = authApi;
+export const { useLoginMutation } = authApi;

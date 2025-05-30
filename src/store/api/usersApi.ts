@@ -14,13 +14,9 @@ export interface TeamUser {
 
 export const usersApi = createApi({
   reducerPath: 'usersApi',
-  
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://jsonplaceholder.typicode.com/',
   }),
-  
-  tagTypes: ['User', 'UserList'],
-  
   endpoints: (builder) => ({
     getTeamUsers: builder.query<TeamUser[], void>({
       query: () => 'users',
@@ -34,30 +30,8 @@ export const usersApi = createApi({
           lastSeen: new Date(Date.now() - Math.random() * 86400000).toISOString(),
           tasksCount: Math.floor(Math.random() * 20),
         })),
-      providesTags: ['UserList'],
-      
-      // Cache for 10 minutes
-      keepUnusedDataFor: 600,
-    }),
-    
-    getUserById: builder.query<TeamUser, number>({
-      query: (id) => `users/${id}`,
-      transformResponse: (response: any): TeamUser => ({
-        id: response.id,
-        name: response.name,
-        email: response.email,
-        role: response.id === 1 ? 'admin' : 'member',
-        status: 'active',
-        lastSeen: new Date().toISOString(),
-        tasksCount: Math.floor(Math.random() * 20),
-      }),
-      providesTags: (result, error, id) => [{ type: 'User', id }],
     }),
   }),
 });
 
-export const {
-  useGetTeamUsersQuery,
-  useGetUserByIdQuery,
-  useLazyGetTeamUsersQuery,
-} = usersApi;
+export const { useGetTeamUsersQuery } = usersApi;

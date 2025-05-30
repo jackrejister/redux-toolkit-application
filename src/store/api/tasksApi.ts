@@ -7,8 +7,6 @@ export interface Task {
   description?: string;
   completed: boolean;
   priority: 'low' | 'medium' | 'high';
-  assigneeId?: number;
-  dueDate?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -24,20 +22,12 @@ export const tasksApi = createApi({
   reducerPath: 'tasksApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://jsonplaceholder.typicode.com/',
-    prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as any).auth.token;
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`);
-      }
-      return headers;
-    },
   }),
-  tagTypes: ['Task', 'TaskStats'],
   endpoints: (builder) => ({
-    getTasks: builder.query<{ tasks: Task[] }, { limit?: number }>({
-      query: ({ limit = 10 }) => `posts?_limit=${limit}`,
-      transformResponse: (response: any[]): { tasks: Task[] } => ({
-        tasks: response.map(post => ({
+    getTasks: builder.query<Task[], void>({
+      query: () => 'posts?_limit=10',
+      transformResponse: (response: any[]): Task[] =>
+        response.map(post => ({
           id: post.id,
           title: post.title,
           description: post.body,
@@ -46,8 +36,6 @@ export const tasksApi = createApi({
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         })),
-      }),
-      providesTags: ['Task'],
     }),
 
     getTaskStats: builder.query<TaskStats, void>({
@@ -65,12 +53,8 @@ export const tasksApi = createApi({
           overdue,
         };
       },
-      providesTags: ['TaskStats'],
     }),
   }),
 });
 
-export const {
-  useGetTasksQuery,
-  useGetTaskStatsQuery,
-} = tasksApi;
+export const { useGetTasksQuery, useGetTaskStatsQuery } = tasksApi;
