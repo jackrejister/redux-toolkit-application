@@ -11,16 +11,13 @@ import {
   Schedule,
   Warning,
 } from '@mui/icons-material';
-import { useAppSelector } from '../store/hooks';
 import { customColors } from '../theme/theme';
 import StatCard from '../components/Dashboard/StatCard';
 import ProgressOverview from '../components/Dashboard/ProgressOverview';
 import RecentTasks from '../components/Dashboard/RecentTasks';
 
 const Dashboard: React.FC = () => {
-  const { user } = useAppSelector(state => state.auth);
-  
-  // Mock data for now to avoid API complexity
+  // Simple mock data without any Redux dependencies
   const taskStats = {
     total: 25,
     completed: 15,
@@ -58,7 +55,7 @@ const Dashboard: React.FC = () => {
   return (
     <Box>
       <Typography variant="h4" gutterBottom>
-        Welcome back, {user?.name || 'User'}! 👋
+        Welcome back, User! 👋
       </Typography>
       <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
         Here's what's happening with your tasks today.
